@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>THE 13TH HOUR — A 2D Gothic Horror-Adventure</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div id="game-container">
+  <!-- Game Canvas Viewport -->
+  <div id="canvas-wrapper">
+    <canvas id="gameCanvas" width="1280" height="720"></canvas>
+    
+    <!-- Watch Glass Lens Vignette Overlay -->
+    <div id="watch-bezel-overlay"></div>
+
+    <!-- HUD Overlay -->
+    <div id="hud-overlay">
+      <!-- Top HUD Bar -->
+      <div class="hud-top-bar">
+        <!-- Left: Lost Memory Echoes Collected -->
+        <div class="echoes-panel">
+          <div class="echoes-title">Memory Echoes</div>
+          <div class="echo-slots">
+            <!-- Slot 1: Old Ticket -->
+            <div class="echo-slot" id="slot-ticket" title="Echo 1: Old Invitation Ticket">
+              <svg viewBox="0 0 24 24">
+                <path d="M4 4v16h16V4H4zm14 9a2 2 0 0 1-2 2v3H8v-3a2 2 0 0 1-2-2 2 2 0 0 1 2-2V6h8v3a2 2 0 0 1 2 2z"/>
+              </svg>
+              <span class="tooltip">Old Ticket</span>
+            </div>
+
+            <!-- Slot 2: Stopped Carousel -->
+            <div class="echo-slot" id="slot-carousel" title="Echo 2: Stopped Carousel">
+              <svg viewBox="0 0 24 24">
+                <path d="M12 2L4 6v2h16V6l-8-4zm7 8h-2v7c1.5 0 2.5 1 2.5 2H6.5c0-1 1-2 2.5-2v-7H7v-1h12v1zm-6 0h-2v7h2v-7z"/>
+              </svg>
+              <span class="tooltip">Carousel</span>
+            </div>
+
+            <!-- Slot 3: Cracked Mirror -->
+            <div class="echo-slot" id="slot-mirror" title="Echo 3: Cracked Mirror">
+              <svg viewBox="0 0 24 24">
+                <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm-1 4.5l2 3-3 2 2 3-1 2-1-2 2-2-2-3 1-1z"/>
+              </svg>
+              <span class="tooltip">Cracked Mirror</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Center: The Grand Pocket Watch (10-minute loop clock) -->
+        <div class="chronos-watch-widget">
+          <div class="watch-casing">
+            <div class="watch-winder"></div>
+            <div class="watch-bezel-ring"></div>
+            <!-- Peak Numeral: XIII -->
+            <span class="watch-dial-label label-xiii">XIII</span>
+            <span class="watch-dial-label label-xii">XII</span>
+            <span class="watch-dial-label label-iii">III</span>
+            <span class="watch-dial-label label-vi">VI</span>
+            <span class="watch-dial-label label-ix">IX</span>
+
+            <!-- Hands -->
+            <div class="watch-hand-minute" id="watch-hand-minute"></div>
+            <div class="watch-hand-second" id="watch-hand-second"></div>
+            <div class="watch-center-pin"></div>
+          </div>
+          <div class="loop-digital-time" id="digital-time-txt">12:13:00</div>
+          <div class="loop-subtext">The 10-Minute Loop</div>
+        </div>
+
+        <!-- Right: Chronos Heart Rewind Gauge -->
+        <div class="rewind-panel">
+          <div class="rewind-btn-container">
+            <div class="rewind-dial">
+              <svg viewBox="0 0 36 36">
+                <path class="rewind-circle-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                <path class="rewind-circle-fill" id="rewind-circle-fill" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+              </svg>
+              <div class="rewind-inner-txt" id="rewind-energy-txt">13.0s</div>
+            </div>
+            <button class="rewind-button" id="rewind-btn">
+              <span>&#8634;</span> REWIND [R]
+            </button>
+          </div>
+          <div class="rewind-hint">Hold [R] to Reverse 13 Seconds</div>
+        </div>
+      </div>
+
+      <!-- Silent Bell Counter Banner -->
+      <div id="bell-counter-banner">
+        <span class="bell-title">THE SILENT BELL:</span>
+        <span class="bell-numeral" id="bell-numeral-display">I (1/13)</span>
+      </div>
+
+      <!-- Contextual Action Prompt (e.g. [E] Inspect) -->
+      <div id="interaction-prompt">
+        <span class="key-badge">E</span> Inspect
+      </div>
+
+      <!-- Bottom HUD Bar -->
+      <div class="hud-bottom-bar">
+        <div class="location-badge">
+          <span>LOCATION</span>
+          <div id="location-name-txt">The Iron Gate &amp; Ticket Booth</div>
+        </div>
+
+        <div class="controls-panel">
+          <div class="control-item"><span class="key-badge">A / D</span> Move</div>
+          <div class="control-item"><span class="key-badge">W / Space</span> Jump</div>
+          <div class="control-item"><span class="key-badge">E</span> Interact</div>
+          <div class="control-item"><span class="key-badge">R</span> Rewind (13s)</div>
+          <div class="control-item"><span class="key-badge">M</span> Audio</div>
+        </div>
+
+        <button class="audio-toggle-btn" id="audio-toggle-btn">
+          🔊 Audio: On
+        </button>
+      </div>
+    </div>
+
+    <!-- Notification Toast -->
+    <div id="toast-notification"></div>
+
+    <!-- Modal for Stories & Interactive Puzzles -->
+    <div class="modal-backdrop" id="story-modal">
+      <div class="modal-frame">
+        <div class="modal-header">
+          <h2 id="modal-title">MODAL TITLE</h2>
+          <button class="modal-close-btn" onclick="window.gameStory.closeModal()">&times;</button>
+        </div>
+        <div class="modal-body" id="modal-body"></div>
+        <div class="modal-footer" id="modal-footer"></div>
+      </div>
+    </div>
+
+    <!-- Cinematic Prologue & Epilogue Screen -->
+    <div class="cinematic-screen" id="cinematic-screen">
+      <h1 class="cinematic-title" id="cinematic-title">THE 13TH HOUR</h1>
+      <div class="cinematic-subtitle" id="cinematic-subtitle">A Gothic Horror-Adventure in Suspended Time</div>
+      <div class="cinematic-body" id="cinematic-body">
+        Vlad, an immortal vampire, discovers the <strong>Chronos Heart</strong>—an antique magical pocket watch of unknown origin.
+        <br><br>
+        When opened at exactly <strong>12:13</strong>, its circular glass face reveals not gears, but a miniature, haunted Victorian carnival sealed in amber twilight.
+        <br><br>
+        Passing through the tiny iron gate, Vlad learns the fairground is trapped in an inescapable <strong>ten-minute time loop</strong>. His only advantage is the Chronos Heart's power to rewind time by <strong>13 seconds</strong> to avert fatal missteps.
+        <br><br>
+        To unravel the secret of the carnival, Vlad must gather <strong>three lost memory echoes</strong>, ring the <strong>Silent Bell thirteen times</strong>, and confront the enigmatic Clockmaker before time collapses forever.
+      </div>
+      <button class="gothic-btn cinematic-start-btn" id="cinematic-action-btn">
+        Step Through the Gate
+      </button>
+    </div>
+
+  </div>
+</div>
+
+<!-- Game Engine Scripts -->
+<script src="jss/audio.js"></script>
+<script src="rewind.js"></script>
+<script src="jss/story.js"></script>
+<script src="jss/puzzles.js"></script>
+<script src="jss/engine.js"></script>
+<script src="jss/game.js"></script>
+
+</body>
+</html>
