@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # THE 13TH HOUR — 3D Gothic Horror-Adventure
 > **An Interactive 3D Gothic Mystery in Suspended Time**
 
@@ -67,3 +68,6 @@ flowchart TD
 
 * **3D Version (Default):** Double-click [`index.html`](file:///C:/Users/victus/.gemini/antigravity/scratch/the-13th-hour/index.html).
 * **Classic 2D Version:** Double-click [`index_2d.html`](file:///C:/Users/victus/.gemini/antigravity/scratch/the-13th-hour/index_2d.html).
+=======
+# THE-13TH-HOUR
+>>>>>>> d3d83f66925c6756eefcaf945374f7a6a89a15ed
